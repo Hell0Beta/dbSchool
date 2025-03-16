@@ -41,16 +41,64 @@ def signup():
         return redirect(url_for('home'))
     return render_template('signup.html')
 
-
 # :::::::::: Dashboard
 @app.route('/')
 def home():
-    return render_template('index.html')
+    context = {
+        'teachers' : fetch_teachers(),
+        'students' : fetch_students(),
+        'totalshi' : fetch_total_shi(),
+        'user' : session['user'],
+        'role' : fetch_user_role()
+    }
+    return render_template('index.html', context = context)
 
 # :::::::::: Student Management
 @app.route('/student')
 def student():
-    return render_template('indexed.html')
+    context = {
+        'teachers' : fetch_teachers(),
+        'students' : fetch_students(),
+        'totalshi' : fetch_total_shi(),
+        'user' : session['user'],
+        'role' : fetch_user_role()
+    }
+    return render_template('indexed.html', context=context)
+
+
+
+ 
+#  Fetch functions
+
+
+def fetch_user_role():
+    user = session['user']
+    print(":::::::::::: ", user)
+    cursor.execute('Select role from USERS164 WHERE USERNAME = ?', user)
+    
+    role = cursor.fetchone()
+    print("::::::::::: ",role[0])
+    return role[0]
+# ::::::::: Fetch all Students
+def fetch_students():
+    cursor.execute('Select * from Students164;')
+    students = cursor.fetchall()
+    return students
+
+def fetch_teachers():
+    cursor.execute('Select * from Teachers164;')
+    teachers = cursor.fetchall()
+    return teachers
+
+def fetch_courses():
+    cursor.execute('Select * from Courses164;')
+    courses = cursor.fetchall()
+    return courses
+
+def fetch_total_shi():
+    cursor.execute('select count(Courses164.CourseID) as c, COUNT(Teachers164.TeacherID) as t, COUNT(Enrollments164.EnrollmentID) as E,COUNT(Students164.StudentID) as S from Teachers164 inner join Courses164 on Courses164.TeacherID = Teachers164.TeacherID  inner join Enrollments164 on COURSES164.CourseID  = Enrollments164.CourseID inner join Students164 on Enrollments164.StudentID = Students164.StudentID;')
+    total_shi = cursor.fetchone()
+    return total_shi
 
 
 
