@@ -65,12 +65,31 @@ def student():
     }
     return render_template('indexed.html', context=context)
 
-
-
+# :::::::::: Teacher Management
+@app.route('/teacher')
+def teacher():
+    context = {
+        'teachers' : fetch_teachers(),
+        'students' : fetch_students(),
+        'totalshi' : fetch_total_shi(),
+        'user' : session['user'],
+        'role' : fetch_user_role()
+    }
+    return render_template('teachers.html', context=context)
+ 
+# :::::::::: Course Management
+@app.route('/course')
+def course():
+    context = {
+        'course' : fetch_courses(),
+        'teachers': fetch_teachers(),
+        'totalshi' : fetch_total_shi(),
+        'user' : session['user'],
+        'role' : fetch_user_role()
+    }
+    return render_template('course.html', context=context)
  
 #  Fetch functions
-
-
 def fetch_user_role():
     user = session['user']
     print(":::::::::::: ", user)
@@ -79,6 +98,7 @@ def fetch_user_role():
     role = cursor.fetchone()
     print("::::::::::: ",role[0])
     return role[0]
+
 # ::::::::: Fetch all Students
 def fetch_students():
     cursor.execute('Select * from Students164;')
@@ -91,7 +111,7 @@ def fetch_teachers():
     return teachers
 
 def fetch_courses():
-    cursor.execute('Select * from Courses164;')
+    cursor.execute('SELECT c.CourseID, c.CourseName, c.Credits, t.Name FROM Teachers164 t LEFT JOIN Courses164 c ON t.TeacherID = c.TeacherID;')
     courses = cursor.fetchall()
     return courses
 
