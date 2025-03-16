@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(to right, #FFFFFF, #4A6FDC);
+        }
+
+        .login-container {
+            display: flex;
+            width: 800px;
+            height: 450px;
+            background: #222;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px #F0F4FF;
+        }
+
+        .form-container {
+            width: 50%;
+            padding: 40px;
+            background: #F0F4FF;
+            color: #333333;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .form-box {
+            transition: opacity 0.5s, transform 0.5s;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        h2 {
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+        }
+
+        .input-group label {
+            display: block;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+
+        .input-group input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            background: #FFFFFF;
+            color: #888888;
+            border-radius: 5px;
+            outline: none;
+        }
+
+        .input-group input:focus, select:focus, textarea:focus {
+            border: 1px solid #6c42f5c9;
+        }
+
+        .input-group select{
+            width: 35%;
+        }
+
+        .forgot-password {
+            display: block;
+            margin: 10px 0;
+            font-size: 12px;
+            color: #bbb;
+            text-decoration: none;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 12px;
+            background: #6c42f5;
+            border: none;
+            color: #fff;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .login-btn:hover {
+            background: #5733d1;
+        }
+
+        .signup-text {
+            text-align: center;
+            margin-top: 15px;
+            font-size: 14px;
+        }
+
+        .signup-text a {
+            color: #6c42f5;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .login-banner {
+            width: 50%;
+            background: #6c42f5;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .login-banner h1 {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .login-banner span {
+            font-weight: 300;
+        }
+
+        .login-banner img {
+            width: 80%;
+            margin-top: 20px;
+        }
+        .alert {
+            width: 100%;
+            position: fixed;
+            top: 0%;
+            padding: 15px;
+            margin-bottom: 20px;
+            border: 1px solid transparent;
+            border-radius: 4px;
+            font-size: 14px;
+            text-align: center;
+        }
+
+        .alert-success {
+            color: #155724;
+            background-color: #d4edda;
+            border-color: #c3e6cb;
+        }
+
+        .alert-danger {
+            color: #721c24;
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+        }
+
+        .alert-warning {
+            color: #856404;
+            background-color: #fff3cd;
+            border-color: #ffeeba;
+        }
+
+        .alert-info {
+            color: #0c5460;
+            background-color: #d1ecf1;
+            border-color: #bee5eb;
+        }
+    </style>
+</head>
+
+<body>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-danger" role="alert">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    </div>
+    <div class="form-container">
+        <form class="form-box login" method="post">
+            <h2>Login</h2>
+            <div class="input-group">
+                <label for="login-username">Username</label>
+                <input type="text" name="login-username" id="login-username" placeholder="Enter your username">
+            </div>
+            <div class="input-group">
+                <label for="login-password">Password</label>
+                <input type="password" name="login-password" id="login-password" placeholder="Enter your password">
+            </div>
+            <a href="#" class="forgot-password">Forgot Password?</a>
+            <button class="login-btn">Login</button>
+            <p class="signup-text">Don't have an account? <a href="#" id="toggle-signup">Sign Up</a></p>
+        </form>
+
+        <form class="form-box signup hidden" method="post" action="{{ url_for('signup') }}">
+            <h2>Sign Up</h2>
+            <div class="input-group">
+                <label for="signup-username">Username</label>
+                <input type="text" id="signup-username" name="signup-username" placeholder="Enter your username">
+            </div>
+            <div class="input-group">
+                <label for="signup-email">Email</label>
+                <input type="email" id="signup-email" placeholder="Enter your email">
+            </div>
+            <div class="input-group">
+                <label for="signup-password">Password</label>
+                <input type="password" name="signup-password" id="signup-password" placeholder="Create a password">
+            </div>
+            <div class="input-group">
+                <label for="signup-role">Role</label>
+                <select name="signup-role" id="signup-role">
+                    <option value="Admin">Admin</option>
+                    <option value="Staff">Staff</option>
+                    <option value="Student">Student</option>
+                </select>
+            </div>
+            <button class="login-btn">Sign Up</button>
+            <p class="signup-text">Already have an account? <a href="#" id="toggle-login">Login</a></p>
+        </form>
+    </div>
+
+</body>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const loginForm = document.querySelector(".login");
+        const signupForm = document.querySelector(".signup");
+        const toggleSignup = document.getElementById("toggle-signup");
+        const toggleLogin = document.getElementById("toggle-login");
+
+        toggleSignup.addEventListener("click", function (event) {
+            event.preventDefault();
+            loginForm.classList.add("hidden");
+            signupForm.classList.remove("hidden");
+        });
+
+        toggleLogin.addEventListener("click", function (event) {
+            event.preventDefault();
+            signupForm.classList.add("hidden");
+            loginForm.classList.remove("hidden");
+        });
+    });
+
+</script>
+
+</html>

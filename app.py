@@ -8,6 +8,40 @@ app = Flask(__name__)
 app.secret_key = 'f8a9c4d6e9b7a2c3e5d8f0a1b4c6d7e8f9a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6'
 
 # ROUTES
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        username = request.form['login-username']
+        password = request.form['login-password']
+        cursor.execute("SELECT * FROM Users164 WHERE username = ? AND PasswordHash = ?", (username, password))
+        user = cursor.fetchone()
+        if user:
+            session['user'] = user[1]
+            return redirect(url_for('home'))
+        else:
+            flash('Invalid username or password', 'danger')
+            return redirect(url_for('login'))
+    return render_template('login.html')
+
+# :::::::::: Sign Up
+@app.route('/signup', methods=['POST'])
+def signup():
+    if request.method == 'POST':
+        cursor.execute("SELECT * FROM Users164 WHERE username = ?", (request.form['signup-username'],))
+        user = cursor.fetchone()
+        if user:
+            flash('Username already exists', 'danger')
+            return redirect(url_for('login'))
+        username = request.form['signup-username']
+        password = request.form['signup-password']
+        role = request.form['signup-role']
+        cursor.execute("INSERT INTO Users164 (username, PasswordHash, role) VALUES (?, ?, ?)", (username, password, role))
+        connection.commit()
+        flash('You are successfully registered', 'success')
+        return redirect(url_for('home'))
+    return render_template('signup.html')
+
+
 # :::::::::: Dashboard
 @app.route('/')
 def home():
