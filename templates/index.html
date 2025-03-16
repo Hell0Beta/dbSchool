@@ -247,4 +247,21 @@
             </div>
         </div>
     {%endblock%}
+    {% block scripts %}
+        <script>
+            function setActiveSidebarItem() {
+                const sidebarItems = document.querySelectorAll('.sidebar li');
+                sidebarItems.forEach(item => {
+                    console.log(item.textContent.trim());
+                    if (item.textContent.trim() === 'Dashboard') {
+                        item.classList.add('active');
+                    } else {
+                        item.classList.remove('active');
+                    }
+                });
+            }
     
+            // Call the function to set the active sidebar item
+            setActiveSidebarItem();
+        </script>
+    {% endblock %}

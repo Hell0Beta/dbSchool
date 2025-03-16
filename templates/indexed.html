@@ -527,6 +527,22 @@
         document.getElementById('nextPageBtn').addEventListener('click', function () {
             alert('Next page functionality not implemented.');
         });
+
+        // Function to set active sidebar item
+        function setActiveSidebarItem() {
+            const sidebarItems = document.querySelectorAll('.sidebar li');
+            sidebarItems.forEach(item => {
+                console.log(item.textContent.trim());
+                if (item.textContent.trim() === 'Student Management') {
+                    item.classList.add('active');
+                } else {
+                    item.classList.remove('active');
+                }
+            });
+        }
+
+        // Call the function to set the active sidebar item
+        setActiveSidebarItem();
     });
 </script>
 {% endblock %}
