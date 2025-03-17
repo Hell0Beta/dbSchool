@@ -65,6 +65,8 @@ def student():
     }
     return render_template('indexed.html', context=context)
 
+
+
 # :::::::::: Teacher Management
 @app.route('/teacher')
 def teacher():
@@ -75,8 +77,41 @@ def teacher():
         'user' : session['user'],
         'role' : fetch_user_role()
     }
-    return render_template('teachers.html', context=context)
- 
+    return render_template('teachers.html', context=context) 
+# :::::::::: add teacher
+@app.route('/add_teacher', methods=['POST'])
+def addteacher():
+    if request.method == 'POST':
+        edit = request.form['edit']
+        name = request.form['TeacherName']
+        age = request.form['TeacherAge']
+        gender = request.form['TeacherGender']
+        phone = request.form['TeacherPhone']
+        department = request.form['TeacherDepartment']
+        teachid = request.form['teachid']
+        print(f"::::::::::::{name}::::::::::::::::{age}::::::::::::::::::::{department}::::::::::::::::::::{phone}::::::::::::::::{edit}")
+        if edit == 'edit':
+            cursor.execute("UPDATE Teachers164 SET Name = ?, Age = ?, Gender = ?, Department = ?, PhoneNumber = ?  WHERE TeacherID = ?", (name, age, gender, department, phone, teachid))
+            connection.commit()
+            flash('Teacher updated successfully', 'success')
+            return redirect(url_for('teacher'))
+        else:
+            cursor.execute("INSERT INTO USERS164 (username, PasswordHash, role) VALUES (?, ?, ?)", (name, age, 'Staff'))
+            cursor.execute("Select UserID from USERS164 WHERE username = ?", name)
+            userid = cursor.fetchone()
+            print(f"::::::::::::{userid[0]}:::::::::::::::::::{name}::::::::::::::::{age}::::::::::::::::::::{department}::::::::::::::::::::{phone}::::::::::::::::{edit}")
+            cursor.execute("UPDATE Teachers164 SET Name = ?, Age = ?, Gender = ?, Department = ?, PhoneNumber = ?  WHERE UserID = ?",  (name, age, gender, department, phone, userid[0]))
+            connection.commit()
+            flash('Teacher added successfully', 'success')
+            return redirect(url_for('teacher'))
+# :::::::::: delete teacher
+@app.route('/delete_teacher/<int:teacher_id>', methods=['POST'])
+def deleteteacher(teacher_id):
+    cursor.  execute("DELETE FROM Teachers164 WHERE TeacherID = ?", (teacher_id))
+    connection.commit()
+    flash('Teacher deleted successfully', 'success')
+    return redirect(url_for('teacher'))
+
 # :::::::::: Course Management
 @app.route('/course')
 def course():
@@ -88,6 +123,30 @@ def course():
         'role' : fetch_user_role()
     }
     return render_template('course.html', context=context)
+ 
+@app.route('/add_course', methods=['POST'])
+def addcourse():
+    Coursename = request.form['CourseName']
+    CourseCredits = int(request.form['CourseCredits'])
+    CourseTeacher = request.form['CourseTeacher']
+    edit = request.form['edit']
+    cursor.execute("Select TeacherID from Teachers164 WHERE Name = ?", CourseTeacher)
+    CourseTeacher = cursor.fetchone()
+    if Coursename == '':
+        flash('Data entry failed', 'danger')
+        return redirect(url_for('course'))
+    else:
+        if edit == 'edit':
+            cursor.execute("UPDATE Courses164 SET CourseName = ?, Credits = ?, TeacherID = ? WHERE CourseID = ?", (Coursename, CourseCredits, CourseTeacher[0], request.form['courseid']))
+            connection.commit()
+            flash('Course updated successfully', 'success')
+            return redirect(url_for('course'))
+        else:
+            cursor.execute("INSERT INTO Courses164 (CourseName, Credits, TeacherID) VALUES (?, ?, ?)", (Coursename, CourseCredits, CourseTeacher[0]))
+            flash('Course added successfully', 'success')
+            connection.commit()
+            return redirect(url_for('course'))
+    pass  
  
 #  Fetch functions
 def fetch_user_role():
@@ -111,7 +170,7 @@ def fetch_teachers():
     return teachers
 
 def fetch_courses():
-    cursor.execute('SELECT c.CourseID, c.CourseName, c.Credits, t.Name FROM Teachers164 t LEFT JOIN Courses164 c ON t.TeacherID = c.TeacherID;')
+    cursor.execute('SELECT c.CourseID, c.CourseName, c.Credits, t.Name FROM Teachers164 t inner JOIN Courses164 c ON t.TeacherID = c.TeacherID;')
     courses = cursor.fetchall()
     return courses
 
