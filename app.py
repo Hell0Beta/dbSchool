@@ -65,6 +65,26 @@ def student():
     }
     return render_template('indexed.html', context=context)
 
+@app.route('/addstudent', methods = ['POST'])
+def addstudent():
+    if request.method == 'POST':
+        name = request.form['studentName']  
+        age = request.form['studentAge']
+        gender = request.form['studentGender']
+        phone = request.form['studentPhone']
+        addr = request.form['studentAddress']
+        edit = request.form['edit']
+        studentid = request.form['studentid']
+        
+        if edit == "edit":
+            cursor.execute("UPDATE STUDENTS164 SET Name = ?, Age = ?, Gender = ?, aDDRESS = ?, PhoneNumber = ?  WHERE StudentID = ?",  (name, age, gender, addr, phone, studentid))
+            return redirect(url_for('student'))
+        else:
+            cursor.execute("INSERT INTO USERS164 (username, PasswordHash, role) VALUES (?, ?, ?)", (name, phone, 'Student'))
+            cursor.execute("Select UserID from USERS164 WHERE username = ?", name)
+            userid = cursor.fetchone()
+            cursor.execute("UPDATE STUDENTS164 SET Name = ?, Age = ?, Gender = ?, aDDRESS = ?, PhoneNumber = ?  WHERE UserID = ?",  (name, age, gender, addr, phone, userid[0]))
+            return redirect(url_for('student'))
 
 
 # :::::::::: Teacher Management
@@ -111,15 +131,23 @@ def deleteteacher(teacher_id):
     cursor.  execute("DELETE FROM Teachers164 WHERE TeacherID = ?", (teacher_id))
     connection.commit()
     response = {"response" :  'success'}
-    flash('Teacher deleted successfully', 'success')
-    return response
+    
+    return jsonify(response)
+
+@app.route('/delete_student/<int:student_id>', methods=['DELETE'])
+def deletestudent(student_id):
+    cursor.execute("DELETE FROM students164 WHERE studentID = ?", (student_id,))
+    connection.commit()
+    response = {"success": True}
+   
+    return jsonify(response)
 
 @app.route('/delete_course/<int:course_id>', methods=['DELETE'])
 def deletecourse(course_id):
     cursor.execute("DELETE FROM Courses164 WHERE CourseID = ?", (course_id,))
     connection.commit()
     response = {"success": True}
-    flash('Course deleted successfully', 'success')
+   
     return jsonify(response)
 
 # :::::::::: Course Management
