@@ -546,6 +546,53 @@
 
         // Call the function to set the active sidebar item
         setActiveSidebarItem();
+
+        // Event listener for edit button
+        tableBody.addEventListener('click', function (e) {
+            if (e.target.closest('.edit-icon')) {
+                const row = e.target.closest('tr');
+                const cells = row.querySelectorAll('td');
+                document.getElementById('TeacherName').value = cells[1].textContent;
+                document.getElementById('TeacherAge').value = cells[2].textContent;
+                document.getElementById('TeacherGender').value = cells[3].textContent;
+                document.getElementById('TeacherPhone').value = cells[5].textContent;
+                document.getElementById('TeacherDepartment').value = cells[4].textContent;
+                document.getElementById('edit').value = 'edit';
+                document.getElementById('teachid').value = cells[0].textContent;
+                openModal();
+            }
+        });
+
+        // Event listener for delete button
+        tableBody.addEventListener('click', function (e) {
+            if (e.target.closest('.delete-icon')) {
+                const row = e.target.closest('tr');
+                const teacherId = row.querySelector('td').textContent;
+
+                // Confirm deletion
+                if (confirm('Are you sure you want to delete this teacher?')) {
+                    fetch(`/delete_teacher/${teacherId}`, {
+                        method: 'DELETE',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                row.remove();
+                            } else {
+                                alert('Failed to delete the teacher.');
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            alert('Reload to see effect ');
+                        });
+                }
+            }
+        });
+
     });
 </script>
 {% endblock %}

@@ -105,12 +105,22 @@ def addteacher():
             flash('Teacher added successfully', 'success')
             return redirect(url_for('teacher'))
 # :::::::::: delete teacher
-@app.route('/delete_teacher/<int:teacher_id>', methods=['POST'])
+
+@app.route('/delete_teacher/<int:teacher_id>', methods=['DELETE'])
 def deleteteacher(teacher_id):
     cursor.  execute("DELETE FROM Teachers164 WHERE TeacherID = ?", (teacher_id))
     connection.commit()
+    response = {"response" :  'success'}
     flash('Teacher deleted successfully', 'success')
-    return redirect(url_for('teacher'))
+    return response
+
+@app.route('/delete_course/<int:course_id>', methods=['DELETE'])
+def deletecourse(course_id):
+    cursor.execute("DELETE FROM Courses164 WHERE CourseID = ?", (course_id,))
+    connection.commit()
+    response = {"success": True}
+    flash('Course deleted successfully', 'success')
+    return jsonify(response)
 
 # :::::::::: Course Management
 @app.route('/course')
@@ -122,13 +132,14 @@ def course():
         'user' : session['user'],
         'role' : fetch_user_role()
     }
+    print(context['teachers'])
     return render_template('course.html', context=context)
  
 @app.route('/add_course', methods=['POST'])
 def addcourse():
     Coursename = request.form['CourseName']
     CourseCredits = int(request.form['CourseCredits'])
-    CourseTeacher = request.form['CourseTeacher']
+    CourseTeacher = request.form['CourseTeachers']
     edit = request.form['edit']
     cursor.execute("Select TeacherID from Teachers164 WHERE Name = ?", CourseTeacher)
     CourseTeacher = cursor.fetchone()
@@ -157,6 +168,7 @@ def fetch_user_role():
     role = cursor.fetchone()
     print("::::::::::: ",role[0])
     return role[0]
+
 
 # ::::::::: Fetch all Students
 def fetch_students():
