@@ -1,0 +1,257 @@
+{% extends "basestud.html" %}
+
+{% block content %}
+        <!-- Styles -->
+        <style>
+            /* Dashboard Content */
+            .dashboard-content {
+                display: flex;
+                flex-direction: column;
+                gap: var(--spacing-lg);
+            }
+    
+            .section-title {
+                font-size: 18px;
+                font-weight: 600;
+                margin-bottom: var(--spacing-md);
+            }
+    
+            /* Metrics Grid */
+            .metrics-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+                gap: var(--spacing-lg);
+            }
+    
+            .metric-card {
+                background-color: var(--primary-bg);
+                border-radius: var(--border-radius);
+                box-shadow: var(--shadow);
+                padding: var(--spacing-lg);
+                transition: all 0.3s ease;
+                border-left: 4px solid var(--accent-color);
+            }
+    
+            .metric-card:hover {
+                transform: translateY(-4px);
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            }
+    
+            .metric-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: var(--spacing-md);
+            }
+    
+            .metric-title {
+                font-size: 16px;
+                color: var(--text-secondary);
+            }
+    
+            .metric-icon {
+                width: 40px;
+                height: 40px;
+                background-color: var(--accent-light);
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+    
+            .metric-icon i {
+                color: var(--accent-color);
+                font-size: 18px;
+            }
+    
+            .metric-value {
+                font-size: 28px;
+                font-weight: 600;
+                margin-bottom: var(--spacing-xs);
+            }
+    
+            .metric-link {
+                color: var(--accent-color);
+                text-decoration: none;
+                font-size: 14px;
+                display: flex;
+                align-items: center;
+                gap: 4px;
+            }
+    
+            .metric-link:hover {
+                text-decoration: underline;
+            }
+    
+            /* Quick Actions */
+            .quick-actions {
+                display: grid;
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+                gap: var(--spacing-md);
+            }
+    
+            .action-btn {
+                background-color: var(--primary-bg);
+                border: 1px solid var(--border-color);
+                border-radius: var(--border-radius);
+                padding: var(--spacing-md);
+                display: flex;
+                align-items: center;
+                gap: var(--spacing-md);
+                cursor: pointer;
+                transition: all 0.2s ease;
+            }
+    
+            .action-btn:hover {
+                background-color: var(--accent-light);
+                border-color: var(--accent-color);
+            }
+    
+            .action-icon {
+                width: 36px;
+                height: 36px;
+                background-color: var(--accent-light);
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+    
+            .action-icon i {
+                color: var(--accent-color);
+                font-size: 16px;
+            }
+    
+            .action-text {
+                font-size: 14px;
+                font-weight: 500;
+            }
+    
+            /* Recent Activity */
+            .recent-activity {
+                background-color: var(--primary-bg);
+                border-radius: var(--border-radius);
+                box-shadow: var(--shadow);
+                padding: var(--spacing-lg);
+            }
+    
+            .activity-item {
+                display: flex;
+                align-items: flex-start;
+                gap: var(--spacing-md);
+                padding: var(--spacing-md) 0;
+                border-bottom: 1px solid var(--border-color);
+            }
+    
+            .activity-item:last-child {
+                border-bottom: none;
+            }
+    
+            .activity-icon {
+                width: 32px;
+                height: 32px;
+                background-color: var(--accent-light);
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-shrink: 0;
+            }
+    
+            .activity-icon i {
+                color: var(--accent-color);
+                font-size: 14px;
+            }
+    
+            .activity-details {
+                flex: 1;
+            }
+    
+            .activity-text {
+                font-size: 14px;
+                margin-bottom: 2px;
+            }
+    
+            .activity-time {
+                font-size: 12px;
+                color: var(--text-secondary);
+            }
+    
+    </style>
+    <!-- Dashboard Content -->
+    <div class="dashboard-content">
+        <!-- Metrics Section -->
+        <div>
+            <h2 class="section-title">Overview</h2>
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <div class="metric-title">CWA</div>
+                        <div class="metric-icon">
+                            <i class="fas fa-user-graduate"></i>
+                        </div>
+                    </div>
+                    <div class="metric-value">{{ context['totalshi'][3]}}</div>
+                    <a href="#" class="metric-link">View Details <i class="fas fa-arrow-right"></i></a>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <div class="metric-title">Total Courses</div>
+                        <div class="metric-icon">
+                            <i class="fas fa-book"></i>
+                        </div>
+                    </div>
+                    <div class="metric-value">30</div>
+                    <a href="#" class="metric-link">View Details <i class="fas fa-arrow-right"></i></a>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <div class="metric-title">Total Enrollments</div>
+                        <div class="metric-icon">
+                            <i class="fas fa-clipboard-list"></i>
+                        </div>
+                    </div>
+                    <div class="metric-value">2000</div>
+                    <a href="#" class="metric-link">View Details <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+        </div>
+        <!-- Recent Activity -->
+        <div>
+            <h2 class="section-title">Recent Activity</h2>
+            <div class="recent-activity">
+                <div class="activity-item">
+                    <div class="activity-icon">
+                        <i class="fas fa-user-graduate"></i>
+                    </div>
+                    <div class="activity-details">
+                        <div class="activity-text">New Course registered - Psychology</div>
+                        <div class="activity-time">2 hours ago</div>
+                    </div>
+                    
+    
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+    function setActiveSidebarItem() {
+        const sidebarItems = document.querySelectorAll('.sidebar li');
+        sidebarItems.forEach(item => {
+            console.log(item.textContent.trim());
+            if (item.textContent.trim() === 'Dashboard') {
+                item.classList.add('active');
+            } else {
+                item.classList.remove('active');
+            }
+        });
+    }
+
+    // Call the function to set the active sidebar item
+    setActiveSidebarItem();
+</script>
+{% endblock %}

@@ -17,7 +17,15 @@ def login():
         user = cursor.fetchone()
         if user:
             session['user'] = user[1]
-            return redirect(url_for('home'))
+            session['role'] = user[3]
+            if user[3] == 'Admin':
+                return redirect(url_for('home'))
+            elif user[3] == 'Teacher':
+                return redirect(url_for('home'))
+            elif user[3] == 'Student':
+                return redirect(url_for('studenthome'))
+            else:
+                return redirect(url_for('login'))
         else:
             flash('Invalid username or password', 'danger')
             return redirect(url_for('login'))
@@ -37,8 +45,17 @@ def signup():
         role = request.form['signup-role']
         cursor.execute("INSERT INTO Users164 (username, PasswordHash, role) VALUES (?, ?, ?)", (username, password, role))
         connection.commit()
+        session['user'] = username
+        session['role'] = role
         flash('You are successfully registered', 'success')
-        return redirect(url_for('home'))
+        if role == 'Admin':
+            return redirect(url_for('home'))
+        elif role == 'Teacher':
+            return redirect(url_for('home'))
+        elif role == 'Student':
+            return redirect(url_for('studenthome'))
+        else:
+            return redirect(url_for('login'))
     return render_template('signup.html')
 
 # :::::::::: Dashboard
@@ -196,6 +213,50 @@ def fetch_user_role():
     role = cursor.fetchone()
     print("::::::::::: ",role[0])
     return role[0]
+
+
+
+
+
+
+# ::::::::::::::::::::: HOME - STUDENTS :::::::::::::::::::::::::::: #
+@app.route('/studenthome')
+def studenthome():
+    context = {
+        'students' : fetch_students(),
+        'totalshi' : fetch_total_shi(),
+        'user' : session['user'],
+        'role' : fetch_user_role()
+    }
+    return render_template('homestud.html', context=context)
+
+@app.route('/studentcourse')
+def studentcourse():
+    context = {
+        'course' : fetch_courses(),
+        'teachers': fetch_teachers(),
+        'totalshi' : fetch_total_shi(),
+        'user' : session['user'],
+        'role' : fetch_user_role()
+    }
+    print(context['teachers'])
+    return render_template('coursestd.html', context=context)
+ 
+@app.route('/studentgrade')
+def studentgrade():
+    context = {
+        'course' : fetch_courses(),
+        'teachers': fetch_teachers(),
+        'totalshi' : fetch_total_shi(),
+        'user' : session['user'],
+        'role' : fetch_user_role()
+    }
+    print(context['teachers'])
+    return render_template('gradestd.html', context=context)
+ 
+
+
+
 
 
 # ::::::::: Fetch all Students

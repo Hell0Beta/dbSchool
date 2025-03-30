@@ -521,40 +521,22 @@
             <h1>School Management</h1>
         </div>
         <ul class="menu">
-            <a href=" {{ url_for('home') }}">
+            <a href=" {{ url_for('studenthome') }}">
                 <li class="menu-item active">
                     <i class="fas fa-tachometer-alt"></i>
                     <span>Dashboard</span>
                 </li>
             </a>
-            <a href=" {{ url_for('student') }}">
-                <li class="menu-item">
-                    <i class="fas fa-user-graduate"></i>
-                    <span>Student Management</span>
-                </li>
-            </a>
-            <a href="{{ url_for('teacher') }}">
-                <li class="menu-item">
-                    <i class="fas fa-chalkboard-teacher"></i>
-                    <span>Teacher Management</span>
-                </li>
-            </a>
-            <a href="{{ url_for('course') }}">
+            <a href="{{ url_for('studentcourse') }}">
                 <li class="menu-item">
                     <i class="fas fa-book"></i>
                     <span>Course Management</span>
                 </li>
             </a>
-            <a href="#">
+            <a href="{{ url_for('studentgrade') }}">
                 <li class="menu-item">
-                    <i class="fas fa-user-shield"></i>
-                    <span>Permission Management</span>
-                </li>
-            </a>
-            <a href="#">
-                <li class="menu-item">
-                    <i class="fas fa-chart-bar"></i>
-                    <span>Reports</span>
+                    <i class="fas fa-graduation-cap"></i>
+                    <span>Grade Management</span>
                 </li>
             </a>
         </ul>
@@ -574,9 +556,10 @@
                     <span class="user-name">{{ context['user'] }}</span>
                     <span class="user-role">{{ context['role'] }}</span>
                 </div>
-                <button class="logout-btn">
+                <button class="logout-btn" >
                     <i class="fas fa-sign-out-alt"></i>
                     <a href="{{url_for('login')}}">Logout</a>
+                    
                 </button>
             </div>
         </div>
@@ -604,9 +587,9 @@
                     alert.style.opacity = '0';
                     setTimeout(function() {
                         alert.style.display = 'none';
-                    }, 5000);
+                    }, 500);
                 });
-            }, 3000);
+            }, 300);
         });
     </script>
     {% endblock %}
