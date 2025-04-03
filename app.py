@@ -254,7 +254,15 @@ def studentgrade():
     print(context['teachers'])
     return render_template('gradestd.html', context=context)
  
-
+@app.route('/role')
+def role():
+    context = {
+        'students' : fetch_students(),
+        'totalshi' : fetch_total_shi(),
+        'user' : session['user'],
+        'role' : fetch_user_role()
+    }
+    return render_template('role.html', context=context)
 
 
 

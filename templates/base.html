@@ -37,7 +37,7 @@
             background: linear-gradient(135deg, #F0F4FF 0%, #DCE6FA 100%);
             color: var(--text-primary);
             min-height: 100vh;
-            display: flex;
+         
         }
 
         /* Sidebar */
@@ -545,7 +545,7 @@
                     <span>Course Management</span>
                 </li>
             </a>
-            <a href="#">
+            <a href="{{url_for('role') }}">
                 <li class="menu-item">
                     <i class="fas fa-user-shield"></i>
                     <span>Permission Management</span>
@@ -566,7 +566,7 @@
         <div class="header">
             <div class="search-container">
                 <i class="fas fa-search"></i>
-                <input type="text" class="search-input" placeholder="Search...">
+                <input type="text" class="search-input" id="search-input" placeholder="Search...">
             </div>
             <div class="user-profile">
                 <div class="user-avatar">{{ context['user'][:1] | upper }}{{ context['user'][2:3] | upper }}</div>
